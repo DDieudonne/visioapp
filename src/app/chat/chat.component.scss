@@ -1,0 +1,51 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+
+    aside {
+        height: 100%;
+        background-color: #384d9d;
+        width: 10%;
+
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            height: 25%;
+            align-items: center;
+
+            span {
+                font-size: 20px;
+            }
+
+            .mat-icon {
+                height: 50px;
+                width: 50px;
+                font-size: 50px;
+            }
+        }
+
+        div:hover {
+            background-color: #ffffff;
+            color: #384d9d;
+        }
+    }
+
+    .selected-class{
+        background-color: #ffffff;
+        color: #384d9d;
+    }
+
+    .logout-class{
+        background-color: #ff1744;
+    }
+
+    section {
+        width: 90%;
+        height: 100%;
+        background-color: #ffffff;
+    }
+}

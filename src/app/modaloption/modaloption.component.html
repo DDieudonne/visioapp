@@ -1,0 +1,90 @@
+<div *ngIf="data?.type == 'newaccount'">
+  <div [formGroup]="formLogin" class="header-div">
+
+    <div class="new-class">
+      <span>Création d'un nouveau compte</span>
+      <mat-icon>person_add</mat-icon>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="lastNameControl" type="text">
+      <mat-icon matSuffix>account_circle</mat-icon>
+      <mat-hint *ngIf="lastNameControl?.invalid">Nom invalide</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="firstNameControl" type="text">
+      <mat-icon matSuffix>account_circle</mat-icon>
+      <mat-hint *ngIf="firstNameControl?.invalid">Prénom invalide</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="mailControl" type="text">
+      <mat-icon matSuffix>email</mat-icon>
+      <mat-hint *ngIf="mailControl?.invalid">entrez un mail valide</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput type="password" formControlName="passControl">
+      <mat-icon matSuffix>lock</mat-icon>
+      <mat-hint *ngIf="passControl?.invalid">minimum 6 caractères</mat-hint>
+    </mat-form-field>
+
+    <div class="center" *ngIf="!loading">
+      <a class="pushme" (click)="createAccount(formLogin)">
+        <span class="inner">Créer compte</span>
+      </a>
+    </div>
+
+    <span *ngIf="loading">
+      <mat-spinner [diameter]="40"></mat-spinner>
+    </span>
+
+    <button mat-button color="warn" (click)="close()">retour</button>
+
+  </div>
+
+</div>
+
+<div *ngIf="data?.type == 'login'" class="header-div">
+  <div [formGroup]="formLogin" class="header-div">
+
+    <div class="new-class">
+      <span>Connexion</span>
+      <mat-icon>language</mat-icon>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="mailControl" type="text">
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput type="password" formControlName="passControl">
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+
+    <div class="center" *ngIf="!loading">
+      <a class="pushme" (click)="logiAccount(formLogin)">
+        <span class="inner">Connecte toi</span>
+      </a>
+    </div>
+
+    <span *ngIf="loading">
+      <mat-spinner [diameter]="40"></mat-spinner>
+    </span>
+
+    <button mat-button color="warn" (click)="close()">retour</button>
+  </div>
+</div>
+
+<div *ngIf="data?.type == 'newsession'" class="header-div">
+
+  <button mat-button color="warn" (click)="close()">retour</button>
+</div>

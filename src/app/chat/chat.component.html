@@ -1,0 +1,13 @@
+<body>
+    <div class="header">
+        <aside>
+            <div *ngFor="let arr of arrayIconsText" [ngClass]=" { 'logout-class' : arr?.out }" (click)="selectCard(arr?.type)">
+                <mat-icon>{{ arr?.icon }}</mat-icon>
+                <span>{{ arr?.name }}</span>
+            </div>
+        </aside>
+        <section>
+            {{ selected }}
+        </section>
+    </div>
+</body>
