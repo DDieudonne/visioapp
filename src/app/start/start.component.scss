@@ -1,7 +1,22 @@
 body {
     height: 100vh;
     background-size: cover;
-    background-image: url('../../assets/imgs/Material-Backgrounds-20-1200-x-772.jpg');
+}
+
+.imgbody1 {
+    background-image: url('../../assets/imgs/1.jpg');
+}
+
+.imgbody2 {
+    background-image: url('../../assets/imgs/2.png');
+}
+
+.imgbody3 {
+    background-image: url('../../assets/imgs/3.jpg');
+}
+
+.imgbody4 {
+    background-image: url('../../assets/imgs/4.jpg');
 }
 
 section {
@@ -11,7 +26,7 @@ section {
     font-size: 14px;
     height: 100%;
 
-    footer{
+    footer {
         position: absolute;
         bottom: 0%;
         background-color: rgba(0, 0, 0, 0.2);
@@ -24,7 +39,8 @@ section {
         display: flex;
         align-items: center;
         justify-content: center;
-        .mat-icon{
+
+        .mat-icon {
             margin-left: 2px;
             cursor: pointer;
             font-size: 13px;
@@ -76,7 +92,7 @@ section {
         right: 1%;
         top: 2%;
 
-      
+
 
         // border: 1px solid #3ED6DA;
         // background-color: transparent;
