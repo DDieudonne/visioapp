@@ -45,6 +45,7 @@ export class AuthentificationService {
   }
 
   getListMySession() {
+    console.log('arraySessions',this.arraySessions)
     return this.arraySessions;
   }
 
@@ -138,6 +139,7 @@ export class AuthentificationService {
 
   createMySession(dataObject): Promise<any> {
     dataObject.pass = CryptoJS.AES.encrypt(dataObject.pass, environment.keyCrypt).toString();
+    console.log('dataObject',dataObject)
     // let passD =  CryptoJS.AES.decrypt(pass, environment.keyCrypt).toString(CryptoJS.enc.Utf8)
     return new Promise<any>((resolve, reject) => {
       this.firestore.collection(`mysessions`).doc(dataObject.user.uid).collection(dataObject.user.uid).add(dataObject)
@@ -187,6 +189,7 @@ export class AuthentificationService {
           let data = d.data();
           observer.next({
             idSession: data.idSession,
+            date: data.date,
             pass: data.pass,
             creator: data.user
           });

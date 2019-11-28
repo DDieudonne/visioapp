@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthentificationService } from '../services/authentification/authentification.service';
-import { v4 as uuid } from 'uuid';
-
+import { v4 as uuid } from 'uuid'
+import * as moment from 'moment';
 @Component({
   selector: 'app-modaloption',
   templateUrl: './modaloption.component.html',
@@ -95,10 +95,21 @@ export class ModaloptionComponent implements OnInit {
 
 
   createNewSession(formLogin: FormGroup) {
+
+    let date = new Date(
+      Date.UTC(
+        new Date().getUTCFullYear(),
+        new Date().getUTCMonth(),
+        new Date().getUTCDate(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes()
+      ))
+
     this.loading = true;
     let object = {
       idSession: this.idSession,
       pass: formLogin.value.passControl,
+      date: date,
       user: this.authentificationService.getUserData()
     }
     this.authentificationService.createMySession(object).then(data => {

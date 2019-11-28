@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { materialModule } from '../material.module';
 import { CommonModule } from '@angular/common';
 import { ChatComponent } from './chat.component';
+import { MomentModule } from 'angular2-moment';
 
 const routes: Routes = [
     { path: '', component: ChatComponent }
@@ -12,6 +13,7 @@ const routes: Routes = [
     imports: [
         RouterModule.forChild(routes),
         materialModule,
+        MomentModule,
         CommonModule
     ],
     exports: [RouterModule],

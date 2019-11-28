@@ -1,10 +1,21 @@
 @import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
-    @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~bootstrap/dist/css/bootstrap.css";
 
-*{
+
+* {
     font-family: 'Karla', sans-serif;
 }
 
-body{
-    margin: 0!important;
+body {
+    margin: 0 !important;
+}
+
+tr.mat-footer-row, tr.mat-row{
+    height: 90px!important;
+}
+
+tr.mat-row:hover {
+    background-color: rgba(192, 192, 192, 0.219);
+    cursor: pointer;
 }
