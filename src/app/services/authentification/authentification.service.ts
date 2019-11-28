@@ -9,17 +9,18 @@ import * as CryptoJS from 'crypto-js';
 import { environment } from 'src/environments/environment';
 
 declare var Peer: any;
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthentificationService {
 
   public modalSubShow = new Subject<any>();
+  public refreshListSession = new Subject<any>();
   private userData: Observable<firebase.User>;
   private peer = new Peer();
   private ref = firebase.firestore().collection('users');
+  private refMySessions = firebase.firestore().collection('mysessions');
   private myId;
   private user;
+  private arraySessions = [];
 
   constructor(
     private angularFireAuth: AngularFireAuth,
@@ -30,9 +31,21 @@ export class AuthentificationService {
     this.userData.subscribe(data => {
       this.setMyId(data.uid);
       this.getMyUser().subscribe(data => {
-        this.setAllMyData(data)
+        this.setAllMyData(data);
+        this.setListMySession();
       });
     });
+  }
+
+  setListMySession() {
+    this.arraySessions.splice(0, this.arraySessions.length);
+    this.getMySessions(this.getMyID()).subscribe(dataSess => {
+      this.arraySessions.indexOf(dataSess.idSession) == -1 ? this.arraySessions.push(dataSess) : null;
+    });
+  }
+
+  getListMySession() {
+    return this.arraySessions;
   }
 
   setMyId(myId) {
@@ -125,12 +138,11 @@ export class AuthentificationService {
 
   createMySession(dataObject): Promise<any> {
     dataObject.pass = CryptoJS.AES.encrypt(dataObject.pass, environment.keyCrypt).toString();
-    console.log('dataObject', dataObject)
     // let passD =  CryptoJS.AES.decrypt(pass, environment.keyCrypt).toString(CryptoJS.enc.Utf8)
     return new Promise<any>((resolve, reject) => {
-      this.firestore.collection("mysessions").doc(dataObject.user.uid).set(dataObject)
+      this.firestore.collection(`mysessions`).doc(dataObject.user.uid).collection(dataObject.user.uid).add(dataObject)
         .then(res => {
-          resolve(true)
+          resolve(true);
         }, err => reject(err));
     });
   }
@@ -165,6 +177,21 @@ export class AuthentificationService {
         });
         observer.next(users);
       });
+    });
+  }
+
+  getMySessions(dataUserId): Observable<any> {
+    return new Observable((observer) => {
+      this.refMySessions.doc(dataUserId).collection(dataUserId).get().then(da => {
+        da.forEach(d => {
+          let data = d.data();
+          observer.next({
+            idSession: data.idSession,
+            pass: data.pass,
+            creator: data.user
+          });
+        });
+      })
     });
   }
 

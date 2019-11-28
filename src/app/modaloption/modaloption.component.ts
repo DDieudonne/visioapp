@@ -17,8 +17,8 @@ export class ModaloptionComponent implements OnInit {
   private passControl: FormControl;
   private formLogin: FormGroup;
   private loading: boolean;
-  private shareWith : boolean;
-  private idSeesion: string;
+  private shareWith: boolean;
+  private idSession: string;
   private
 
   constructor(
@@ -27,7 +27,7 @@ export class ModaloptionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: any) { }
 
   ngOnInit() {
-    this.idSeesion = uuid();
+    this.idSession = uuid();
     this.lastNameControl = new FormControl('', Validators.compose([Validators.required]));
     this.firstNameControl = new FormControl('', Validators.compose([Validators.required]));
     this.passControl = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]));
@@ -97,16 +97,16 @@ export class ModaloptionComponent implements OnInit {
   createNewSession(formLogin: FormGroup) {
     this.loading = true;
     let object = {
-      idSeesion: this.idSeesion,
+      idSession: this.idSession,
       pass: formLogin.value.passControl,
       user: this.authentificationService.getUserData()
     }
     this.authentificationService.createMySession(object).then(data => {
-      console.log('data', data)
       if (data) {
         this.loading = false;
         this.shareWith = true;
-      }else{
+        this.authentificationService.setListMySession();
+      } else {
         this.loading = false;
         this.shareWith = false;
       }

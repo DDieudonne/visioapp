@@ -19,15 +19,16 @@ export class ChatComponent implements OnInit {
   private selected: string = "rooms";
   private peerId;
   private socket: any;
+  private array = ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"]
 
   constructor(private authentificationService: AuthentificationService) {
     this.socket = io("http://localhost:3000/");
   }
 
   ngOnInit() {
-    this.authentificationService.getPeerInit().subscribe(peer => {
-      this.peerId = peer.id;
-    });
+    this.authentificationService.getPeerInit().subscribe(peer => { this.peerId = peer.id });
+    this.authentificationService.getListMySession();
+    // console.log('this.authentificationService.getListMySession()', this.authentificationService.getListMySession())
     // console.log('this.authentificationService.getMyID()',this.authentificationService.getMyID())
     // this.authentificationService.getAllUSers().subscribe(data => {
     //   console.log('data USERS', data)

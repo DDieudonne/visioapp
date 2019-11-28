@@ -3,6 +3,24 @@
     align-items: center;
     height: 100vh;
 
+    .head-card{
+        background-color: red;
+        width: 100%;
+    }
+
+    .profil{
+        height: 100%;
+        width: 3%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        img{
+            width: 80%;
+            border-radius: 100px;
+            margin-top: 45%;
+        }
+    }
+
     aside {
         border-top-right-radius: 5px;
         height: 100%;
@@ -55,14 +73,13 @@
     }
 
     section {
-        width: 90%;
+        width: 87%;
         height: 100%;
         background-color: #ffffff;
 
         .created{
             display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%;
             .empty{
                 width: 40%;
             }
