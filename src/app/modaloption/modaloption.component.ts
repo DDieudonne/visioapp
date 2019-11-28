@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthentificationService } from '../services/authentification/authentification.service';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-modaloption',
@@ -16,6 +17,7 @@ export class ModaloptionComponent implements OnInit {
   private passControl: FormControl;
   private formLogin: FormGroup;
   private loading: boolean;
+  private idSeesion :string;
 
   constructor(
     private dialogRef: MatDialogRef<ModaloptionComponent>,
@@ -23,6 +25,7 @@ export class ModaloptionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: any) { }
 
   ngOnInit() {
+    this.idSeesion = uuid();
     this.lastNameControl = new FormControl('', Validators.compose([Validators.required]));
     this.firstNameControl = new FormControl('', Validators.compose([Validators.required]));
     this.passControl = new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]));
@@ -43,7 +46,9 @@ export class ModaloptionComponent implements OnInit {
         });
         break;
       case "newsession":
-
+        this.formLogin = new FormGroup({
+          passControl: this.passControl
+        });
         break;
     }
 
@@ -84,6 +89,11 @@ export class ModaloptionComponent implements OnInit {
     } else {
       this.loading = false;
     }
+  }
+
+
+  createNewSession(formLogin: FormGroup) {
+    // formLogin.value.passControl
   }
 
   close(state?) {

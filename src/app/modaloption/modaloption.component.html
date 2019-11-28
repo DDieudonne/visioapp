@@ -85,6 +85,37 @@
 </div>
 
 <div *ngIf="data?.type == 'newsession'" class="header-div">
+  <div [formGroup]="formLogin" class="header-div">
 
-  <button mat-button color="warn" (click)="close()">retour</button>
+    <div class="new-class">
+      <span>Nouvelle session</span>
+      <mat-icon>meeting_room</mat-icon>
+    </div>
+
+    <div class="ids-header">
+      <span>
+        ID de votre nouvelle session
+      </span>
+      <strong>{{ idSeesion }}</strong>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mot de passe de la session</mat-label>
+      <input matInput type="password" formControlName="passControl">
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+
+    <div class="center" *ngIf="!loading">
+      <a class="pushme" (click)="createNewSession(formLogin)">
+        <span class="inner">Créer une session</span>
+      </a>
+    </div>
+
+    <span *ngIf="loading">
+      <mat-spinner [diameter]="40"></mat-spinner>
+    </span>
+
+    <button mat-button color="warn" (click)="close()">retour</button>
+  </div>
+
 </div>

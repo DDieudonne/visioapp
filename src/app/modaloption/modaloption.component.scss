@@ -18,6 +18,14 @@
      }
 }
 
+.ids-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8%;
+}
+
 .pushme {
     position: relative;
     font-weight: 700;

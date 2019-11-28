@@ -1,13 +1,26 @@
 <body>
-    <div class="header">
-        <aside>
-            <div *ngFor="let arr of arrayIconsText" [ngClass]=" { 'logout-class' : arr?.out }" (click)="selectCard(arr?.type)">
-                <mat-icon>{{ arr?.icon }}</mat-icon>
-                <span>{{ arr?.name }}</span>
-            </div>
-        </aside>
-        <section>
-            {{ selected }}
-        </section>
-    </div>
+  <div class="header">
+    <aside>
+      <div *ngFor="let arr of arrayIconsText" [ngClass]=" { 'logout-class' : arr?.out, 'selected-class' : arr?.check }"
+        (click)="selectCard(arr?.type)">
+        <mat-icon>{{ arr?.icon }}</mat-icon>
+        <span>{{ arr?.name }}</span>
+      </div>
+    </aside>
+    <section>
+      <header>
+        <div class="center">
+          <a class="pushme" *ngIf="selected == 'rooms' || selected ==  'events'" (click)="createSeesion()">
+            <span class="inner">Créer room</span>
+          </a>
+        </div>
+      </header>
+      <div *ngIf="selected == 'rooms'" class="created">
+        <img src="assets/imgs/undraw_empty_xct9.svg" alt="undraw_empty_xct9" class="empty">
+      </div>
+      <div *ngIf="selected == 'events'" class="created">
+        <img src="assets/imgs/undraw_calendar_dutt.svg" alt="undraw_calendar_dutt" class="empty">
+      </div>
+    </section>
+  </div>
 </body>
