@@ -11,6 +11,7 @@ export class ChatComponent implements OnInit {
 
   private arrayIconsText = [
     { name: "Mes rooms", icon: "meeting_room", type: "rooms", check: true },
+    { name: "World Rooms", icon: "language", type: "world", check: false },
     { name: "Mon planning", icon: "event", type: "events", check: false },
     { name: "Mes paramètres", icon: "build", type: "parameters", check: false },
     { name: "Déconnexion", icon: "directions_run", type: "logout", out: true, check: false }
@@ -27,7 +28,7 @@ export class ChatComponent implements OnInit {
     this.authentificationService.getPeerInit().subscribe(peer => {
       this.peerId = peer.id;
     });
-    console.log('this.authentificationService.getMyID()',this.authentificationService.getMyID())
+    // console.log('this.authentificationService.getMyID()',this.authentificationService.getMyID())
     // this.authentificationService.getAllUSers().subscribe(data => {
     //   console.log('data USERS', data)
     // });
@@ -44,7 +45,7 @@ export class ChatComponent implements OnInit {
     }
   };
 
-  createSeesion() {
+  createSession() {
     this.authentificationService.modalSubShow.next('newsession');
   }
 

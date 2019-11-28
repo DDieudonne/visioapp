@@ -10,7 +10,7 @@
     <section>
       <header>
         <div class="center">
-          <a class="pushme" *ngIf="selected == 'rooms' || selected ==  'events'" (click)="createSeesion()">
+          <a class="pushme" *ngIf="selected == 'rooms' || selected ==  'events' || selected == 'world'" (click)="createSession()">
             <span class="inner">Créer room</span>
           </a>
         </div>
@@ -18,8 +18,14 @@
       <div *ngIf="selected == 'rooms'" class="created">
         <img src="assets/imgs/undraw_empty_xct9.svg" alt="undraw_empty_xct9" class="empty">
       </div>
+      <div *ngIf="selected == 'world'" class="created">
+        <img src="assets/imgs/undraw_connected_world_wuay.svg" alt="undraw_connected_world_wuay" class="empty">
+      </div>
       <div *ngIf="selected == 'events'" class="created">
         <img src="assets/imgs/undraw_calendar_dutt.svg" alt="undraw_calendar_dutt" class="empty">
+      </div>
+      <div class="profil">
+        <img src="" alt="">
       </div>
     </section>
   </div>

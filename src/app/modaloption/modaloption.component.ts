@@ -17,7 +17,9 @@ export class ModaloptionComponent implements OnInit {
   private passControl: FormControl;
   private formLogin: FormGroup;
   private loading: boolean;
-  private idSeesion :string;
+  private shareWith : boolean;
+  private idSeesion: string;
+  private
 
   constructor(
     private dialogRef: MatDialogRef<ModaloptionComponent>,
@@ -93,7 +95,25 @@ export class ModaloptionComponent implements OnInit {
 
 
   createNewSession(formLogin: FormGroup) {
-    // formLogin.value.passControl
+    this.loading = true;
+    let object = {
+      idSeesion: this.idSeesion,
+      pass: formLogin.value.passControl,
+      user: this.authentificationService.getUserData()
+    }
+    this.authentificationService.createMySession(object).then(data => {
+      console.log('data', data)
+      if (data) {
+        this.loading = false;
+        this.shareWith = true;
+      }else{
+        this.loading = false;
+        this.shareWith = false;
+      }
+    }).catch(() => {
+      this.loading = false;
+      this.shareWith = false;
+    })
   }
 
   close(state?) {

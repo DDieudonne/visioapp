@@ -5,6 +5,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import * as CryptoJS from 'crypto-js';
+import { environment } from 'src/environments/environment';
 
 declare var Peer: any;
 @Injectable({
@@ -17,6 +19,7 @@ export class AuthentificationService {
   private peer = new Peer();
   private ref = firebase.firestore().collection('users');
   private myId;
+  private user;
 
   constructor(
     private angularFireAuth: AngularFireAuth,
@@ -26,11 +29,22 @@ export class AuthentificationService {
     this.userData = angularFireAuth.authState;
     this.userData.subscribe(data => {
       this.setMyId(data.uid);
+      this.getMyUser().subscribe(data => {
+        this.setAllMyData(data)
+      });
     });
   }
 
   setMyId(myId) {
     this.myId = myId;
+  }
+
+  setAllMyData(data) {
+    this.user = data;
+  }
+
+  getUserData() {
+    return this.user;
   }
 
   getMyID() {
@@ -106,10 +120,27 @@ export class AuthentificationService {
         .then(res => {
           resolve(true)
         }, err => reject(err));
-      // this.firestore
-      //   .collection("users")
-      //   .add(data)
+    });
+  }
 
+  createMySession(dataObject): Promise<any> {
+    dataObject.pass = CryptoJS.AES.encrypt(dataObject.pass, environment.keyCrypt).toString();
+    console.log('dataObject', dataObject)
+    // let passD =  CryptoJS.AES.decrypt(pass, environment.keyCrypt).toString(CryptoJS.enc.Utf8)
+    return new Promise<any>((resolve, reject) => {
+      this.firestore.collection("mysessions").doc(dataObject.user.uid).set(dataObject)
+        .then(res => {
+          resolve(true)
+        }, err => reject(err));
+    });
+  }
+
+  createSessionWorld(dataObject): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.firestore.collection("sessionsworld").doc(dataObject.uid).set(dataObject)
+        .then(res => {
+          resolve(true)
+        }, err => reject(err));
     });
   }
 

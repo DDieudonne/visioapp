@@ -1,6 +1,7 @@
 
 export const environment = {
   production: false,
+  keyCrypt: "ce3a92af-0c96-4d19-8130-dfa464d6e746",
   firebaseConfig: {
     apiKey: "AIzaSyAw7BMeVmDsRsDIYdpm_i8lqxDvUsy-qLE",
     authDomain: "visioapp-a3191.firebaseapp.com",

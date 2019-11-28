@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 })
 export class StartComponent implements OnInit {
 
-  private imgs = ['1', '2', '3', '4'];
+  private imgs = ['1', '2', '3', '4', '5', '6', '7', '8'];
   private imgId;
 
   private $dataUserSub: Subscription;
@@ -20,9 +20,9 @@ export class StartComponent implements OnInit {
 
   ngOnInit() {
     this.imgId = Math.floor(Math.random() * this.imgs.length);
-    console.log('imgId',this.imgId)
+    console.log('imgId', this.imgId)
     this.$dataUserSub = this.authentificationService.userDataSub().subscribe(data => {
-      console.log('data',data)
+      console.log('data', data)
     });
   }
   modalOpen(state) {

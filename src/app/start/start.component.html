@@ -1,4 +1,14 @@
-<body [ngClass]="{'imgbody1': imgId == 1, 'imgbody0': imgId == 0,'imgbody2': imgId == 2,'imgbody3': imgId == 3,'imgbody4': imgId == 4}">
+<body [ngClass]="{ 
+  'imgbody0': imgId == 0, 
+  'imgbody1': imgId == 1,
+  'imgbody2': imgId == 2,
+  'imgbody3': imgId == 3,
+  'imgbody4': imgId == 4,
+  'imgbody5': imgId == 5,
+  'imgbody6': imgId == 6,
+  'imgbody7': imgId == 7,
+  'imgbody8': imgId == 8
+}">
   <section>
     <span class="login" (click)="modalOpen('login')">
       <div class="center"><a class="pushme"> <span class="inner">Connexion</span></a></div>
