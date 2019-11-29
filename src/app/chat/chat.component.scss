@@ -32,7 +32,7 @@
             justify-content: center;
             align-items: center;
             color: #ffffff;
-            height: 20%;
+            height: 25%;
             align-items: center;
 
             span {
@@ -162,4 +162,80 @@ table {
 .img-table {
     width: 50px;
     border-radius: 100px;
+}
+
+.avatar-header {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+
+    .names{
+        font-size: 30px;
+        height: 50%;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding-left: 30px;
+        .lastname{
+            color: #232e3a;
+            text-transform: uppercase;
+            font-size: 40px;
+        }
+    }
+
+    .image-div {
+        position: relative;
+        width: 20%;
+        margin-top: 2%;
+        margin-left: 2%;
+
+        .filter {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 100;
+            border-radius: 100%;
+            transition-duration: 0.5s;
+
+            .mat-icon {
+                height: 50px;
+                width: 50px;
+                font-size: 50px;
+                color: #ffffff !important;
+                visibility: hidden;
+            }
+        }
+
+        .filter:hover {
+            background-color: rgba(0, 0, 0, 0.58);
+        }
+
+        .filter:hover .mat-icon {
+            visibility: visible;
+            cursor: pointer;
+        }
+
+        .blank-profil-parm {
+            width: 100%;
+            border-radius: 100%;
+            height: 35vh;
+            z-index: 0;
+        }
+    }
+
+}
+
+.notif {
+    height: 40px;
+    width: 40px;
+    font-size: 40px;
+    margin-right: 15px;
+    cursor: pointer;
+    color: #4A4A4A;
 }

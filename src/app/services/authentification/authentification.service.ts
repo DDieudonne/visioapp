@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
@@ -7,17 +7,21 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import * as CryptoJS from 'crypto-js';
 import { environment } from 'src/environments/environment';
+import { takeUntil, take } from 'rxjs/operators';
 
 declare var Peer: any;
 @Injectable({ providedIn: 'root' })
 export class AuthentificationService {
 
-  public modalSubShow = new Subject<any>();
-  public refreshListSession = new Subject<any>();
-  private userData: Observable<firebase.User>;
   private peer = new Peer();
   private ref = firebase.firestore().collection('users');
   private refMySessions = firebase.firestore().collection('mysessions');
+  public modalSubShow = new Subject<any>();
+  public unsuscrib$ = new Subject<any>();
+
+  public getUserSub = new Subject<any>();
+  private userData: Observable<firebase.User>;
+  private userDataSubcript: Subscription;
   private myId;
   private user;
   private arraySessions = [];
@@ -29,23 +33,27 @@ export class AuthentificationService {
   ) {
     this.userData = angularFireAuth.authState;
     this.userData.subscribe(data => {
-      this.setMyId(data.uid);
-      this.getMyUser().subscribe(data => {
-        this.setAllMyData(data);
-        this.setListMySession();
-      });
+      if (data) {
+        this.setMyId(data.uid);
+        this.getMyUser()
+          .pipe((take(1)))
+          .subscribe(data => {
+            this.setAllMyData(data);
+            this.setListMySession();
+          });
+      }
     });
   }
 
   setListMySession() {
     this.arraySessions.splice(0, this.arraySessions.length);
     this.getMySessions(this.getMyID()).subscribe(dataSess => {
-      this.arraySessions.indexOf(dataSess.idSession) == -1 ? this.arraySessions.push(dataSess) : null;
+      this.arraySessions.indexOf(dataSess.idSession) == -1 ? this.arraySessions.unshift(dataSess) : null;
     });
   }
 
   getListMySession() {
-    console.log('arraySessions',this.arraySessions)
+    console.log('arraySessions', this.arraySessions)
     return this.arraySessions;
   }
 
@@ -55,6 +63,7 @@ export class AuthentificationService {
 
   setAllMyData(data) {
     this.user = data;
+    this.getUserSub.next(data);
   }
 
   getUserData() {
@@ -116,9 +125,11 @@ export class AuthentificationService {
         .signOut().then(() => {
           resolve(true);
           this.router.navigateByUrl('/start');
+          this.reset();
         }).catch(() => {
           resolve(true);
           this.router.navigateByUrl('/start');
+          this.reset();
         });
     });
   }
@@ -132,14 +143,26 @@ export class AuthentificationService {
     return new Promise<any>((resolve, reject) => {
       this.firestore.collection("users").doc(dataObject.uid).set(dataObject)
         .then(res => {
-          resolve(true)
+          resolve(true);
+        }, err => reject(err));
+    });
+  }
+
+  saveImgUser(user, imgURL): Promise<any> {
+    user.hasAvatar = true;
+    user.photoURL = imgURL;
+    let newUser = user;
+    return new Promise<any>((resolve, reject) => {
+      this.firestore.collection("users").doc(user.uid).set(newUser)
+        .then(res => {
+          resolve(true);
         }, err => reject(err));
     });
   }
 
   createMySession(dataObject): Promise<any> {
     dataObject.pass = CryptoJS.AES.encrypt(dataObject.pass, environment.keyCrypt).toString();
-    console.log('dataObject',dataObject)
+    console.log('dataObject', dataObject)
     // let passD =  CryptoJS.AES.decrypt(pass, environment.keyCrypt).toString(CryptoJS.enc.Utf8)
     return new Promise<any>((resolve, reject) => {
       this.firestore.collection(`mysessions`).doc(dataObject.user.uid).collection(dataObject.user.uid).add(dataObject)
@@ -199,8 +222,10 @@ export class AuthentificationService {
   }
 
   getMyUser(): Observable<any> {
+    console.log('this.getMyID()', this.getMyID())
     return new Observable((observer) => {
       this.ref.doc(this.getMyID()).get().then((doc) => {
+        console.log('doc create session', doc)
         let data = doc.data();
         observer.next({
           key: doc.id,
@@ -208,7 +233,8 @@ export class AuthentificationService {
           firstname: data.firstname,
           hasAvatar: data.hasAvatar,
           lastname: data.lastname,
-          uid: data.uid
+          uid: data.uid,
+          photoURL: data.photoURL
         });
       });
     });
@@ -219,6 +245,14 @@ export class AuthentificationService {
       observer.next(this.peer);
       observer.complete();
     });
+  }
+
+  reset() {
+    this.unsuscrib$.next();
+    this.unsuscrib$.complete();
+    this.arraySessions.splice(0, this.arraySessions.length);
+    this.myId = undefined;
+    this.user = undefined;
   }
 
 }

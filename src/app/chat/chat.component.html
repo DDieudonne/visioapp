@@ -1,33 +1,40 @@
 <body>
   <div class="header-big">
     <aside>
-      <div *ngFor="let arr of arrayIconsText" [ngClass]=" { 'logout-class' : arr?.out, 'selected-class' : arr?.check }"
-        (click)="selectCard(arr?.type)">
+      <div *ngFor="let arr of arrayIconsText" [ngClass]=" {'selected-class' : arr?.check }" (click)="selectCard(arr?.type)">
         <mat-icon>{{ arr?.icon }}</mat-icon>
         <span>{{ arr?.name }}</span>
       </div>
     </aside>
     <section>
       <header class="menu">
-        <div class="center">
-          <a class="pushme" *ngIf="selected == 'rooms' || selected ==  'events' || selected == 'world'"
-            (click)="createSession()">
+        <div class="center" matTooltip="Créer une nouvelle room">
+          <a class="pushme"  (click)="createSession()">
             <span class="inner">Créer room</span>
           </a>
         </div>
-        <img src="assets/imgs/blank-profil.png" alt="blank-profil" class="blank-profil" *ngIf="selected == 'rooms' || selected ==  'events' || selected == 'world'">
+        <mat-icon class="notif" matTooltip="Vous avez 0 notification">notifications</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="selectCard('parameters')">Paramètre de compte</button>
+          <button mat-menu-item (click)="selectCard('logout')">Déconnexion</button>
+        </mat-menu>
+        <img src="assets/imgs/blank-profil.png" alt="blank-profil" class="blank-profil" *ngIf="selected == 'rooms' && !user?.hasAvatar"
+          [matMenuTriggerFor]="menu">
+        <img [src]="user?.photoURL" alt="user?.photoURL" class="blank-profil" *ngIf="selected == 'rooms' && user?.hasAvatar"
+          [matMenuTriggerFor]="menu">
       </header>
       <div *ngIf="selected == 'rooms'" class="created">
-        <img src="assets/imgs/undraw_empty_xct9.svg" alt="undraw_empty_xct9" class="empty"
-          *ngIf="dataSource?.length == 0">
+        <img src="assets/imgs/undraw_empty_xct9.svg" alt="undraw_empty_xct9" class="empty" *ngIf="dataSource?.length == 0">
 
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="dataSource?.length > 0">
 
           <!-- Name Column -->
           <ng-container matColumnDef="image">
             <th mat-header-cell *matHeaderCellDef> image </th>
-            <td mat-cell *matCellDef="let element"> <img src="assets/imgs/blank-profil.png"
-                alt="assets/imgs/blank-profil.png" class="img-table"> </td>
+            <!-- <td mat-cell *matCellDef="let element"> <img src="assets/imgs/blank-profil.png" alt="assets/imgs/blank-profil.png"
+                class="img-table" *ngIf="!user?.hasAvatar"></td> -->
+            <td mat-cell *matCellDef="let element">
+              <img [src]="user?.photoURL" alt="user?.photoURL" class="img-table" *ngIf="user?.hasAvatar"></td>
           </ng-container>
 
           <!-- Name Column -->
@@ -39,7 +46,7 @@
           <!-- Name Column -->
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef> date </th>
-            <td mat-cell *matCellDef="let element"> {{element.date.toDate() | amLocale:'fr' | amTimeAgo:true  }} </td>
+            <td mat-cell *matCellDef="let element"> {{element.date.toDate() | amLocale:'fr' | amTimeAgo:true }} </td>
           </ng-container>
 
           <ng-container matColumnDef="id">
@@ -53,12 +60,28 @@
         </table>
 
       </div>
-      <div *ngIf="selected == 'world'" class="created">
-        <img src="assets/imgs/undraw_connected_world_wuay.svg" alt="undraw_connected_world_wuay" class="empty">
+
+      <div *ngIf="selected == 'parameters'" class="created">
+        <div class="avatar-header">
+          <div class="image-div">
+            <span class="filter">
+              <mat-icon color="light" matTooltip="Utiliser votre webcam" (click)="openWebcam()">photo_camera</mat-icon>
+              <mat-icon color="light" matTooltip="Importer une image de l'ordinateur" (click)="importFile?.click()">photo</mat-icon>
+              <input type="file" hidden accept="image/*" #importFile (change)="fileImportFunction($event?.target?.files)">
+            </span>
+            <img src="assets/imgs/blank-profil.png" alt="blank-profil" class="blank-profil-parm" *ngIf="!user?.hasAvatar && !imgURL">
+            <img [src]="imgURL" alt="blank-profil" class="blank-profil-parm" *ngIf="imgURL">
+            <img [src]="user?.photoURL" alt="blank-profil" class="blank-profil-parm" *ngIf="user?.hasAvatar && !imgURL">
+          </div>
+          <div class="names">
+            <span class="lastname">{{ user?.lastname }}</span>
+            <span>{{ user?.firstname }}</span>
+            <span>{{ user?.uid }}</span>
+            <span>{{ user?.email }}</span>
+          </div>
+        </div>
       </div>
-      <div *ngIf="selected == 'events'" class="created">
-        <img src="assets/imgs/undraw_calendar_dutt.svg" alt="undraw_calendar_dutt" class="empty">
-      </div>
+
     </section>
   </div>
 </body>

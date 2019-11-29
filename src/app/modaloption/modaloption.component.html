@@ -129,7 +129,7 @@
     <div class="center">
       <a class="pushme" style="text-align:center">
         <span class="inner">Partager avec:<br>
-        <span style="font-size:12px">(ajouter des emails manuellement)</span>
+          <span style="font-size:12px">(ajouter des emails manuellement)</span>
         </span>
       </a>
     </div>
@@ -147,4 +147,20 @@
     <button mat-button color="warn" (click)="close()">Terminer</button>
   </div>
 
+</div>
+
+<div *ngIf="data?.type == 'webcam'">
+  <div style="text-align:center">
+    <div>
+      <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+        [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable" [videoOptions]="videoOptions"></webcam>
+      <br />
+      <div class="actionBtn" (click)="triggerSnapshot();" title="Take Picture">📸</div>
+    </div>
+  </div>
+
+  <h4 *ngIf="errors.length > 0">Messages:</h4>
+  <ul *ngFor="let error of errors">
+    <li>{{error | json}}</li>
+  </ul>
 </div>

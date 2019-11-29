@@ -3,7 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthentificationService } from '../services/authentification/authentification.service';
 import { v4 as uuid } from 'uuid'
-import * as moment from 'moment';
+import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { Subject, Observable } from 'rxjs';
+
 @Component({
   selector: 'app-modaloption',
   templateUrl: './modaloption.component.html',
@@ -19,7 +21,19 @@ export class ModaloptionComponent implements OnInit {
   private loading: boolean;
   private shareWith: boolean;
   private idSession: string;
-  private
+
+  private showWebcam = true;
+  private allowCameraSwitch = true;
+  private multipleWebcamsAvailable = false;
+  private deviceId: string;
+  private videoOptions: MediaTrackConstraints = {
+    width: { ideal: 1024 },
+    height: { ideal: 576 }
+  };
+
+  private errors: WebcamInitError[] = [];
+  private trigger: Subject<void> = new Subject<void>();
+  private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
 
   constructor(
     private dialogRef: MatDialogRef<ModaloptionComponent>,
@@ -52,6 +66,12 @@ export class ModaloptionComponent implements OnInit {
           passControl: this.passControl
         });
         break;
+      case "webcam":
+        // WebcamUtil.getAvailableVideoInputs()
+        //   .then((mediaDevices: MediaDeviceInfo[]) => {
+        //     this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+        //   });
+        break;
     }
 
   }
@@ -62,7 +82,8 @@ export class ModaloptionComponent implements OnInit {
       firstname: formLogin.value.firstNameControl,
       email: formLogin.value.mailControl,
       uid: null,
-      hasAvatar: false
+      hasAvatar: false,
+      photoURL : ""
     }
     this.loading = true;
     if (formLogin.status == "VALID") {
@@ -113,6 +134,7 @@ export class ModaloptionComponent implements OnInit {
       user: this.authentificationService.getUserData()
     }
     this.authentificationService.createMySession(object).then(data => {
+      console.log('ERROR CRETE',data)
       if (data) {
         this.loading = false;
         this.shareWith = true;
@@ -121,7 +143,8 @@ export class ModaloptionComponent implements OnInit {
         this.loading = false;
         this.shareWith = false;
       }
-    }).catch(() => {
+    }).catch((err) => {
+      console.log('ERROR CRETE',err)
       this.loading = false;
       this.shareWith = false;
     })
@@ -130,5 +153,20 @@ export class ModaloptionComponent implements OnInit {
   close(state?) {
     this.dialogRef.close(state);
   }
+
+  // WEBCAM
+  public triggerSnapshot(): void {
+    this.trigger.next();
+  }
+  public toggleWebcam(): void {
+    this.showWebcam = !this.showWebcam;
+  }
+  public handleImage(webcamImage: WebcamImage): void {
+    
+  }
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+  // WEBCAM
 
 }
